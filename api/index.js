@@ -33,7 +33,7 @@ async function sendMail(){
             from: 'Bùi Đức Kiên <kienducbui24@gmail.com>',
             to: 'buiduckien24@gmail.com',
             subject: "Test",
-            text: "abc",
+            text: "final",
             html: ''
         };
 
