@@ -16,7 +16,7 @@ document.getElementById('emailForm').addEventListener('submit', function(event) 
     if (mail === "" || name === "") {
         window.alert("Nhập đầy đủ đi nha.");
     } else {
-        fetch('/api/confirm-email', {
+        fetch('/app', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
