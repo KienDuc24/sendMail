@@ -2,11 +2,10 @@
   "name": "sendMail",
   "version": "1.0.0",
   "main": "index.html",
-    "scripts": {
-      "dev": "node index.js",  
-      "start": "node run.js" 
-    }
-  ,
+  "scripts": {
+    "dev": "node index.js",
+    "start": "node run.js"
+  },
   "dependencies": {
     "express": "^4.17.1"
   }
