@@ -16,18 +16,18 @@ document.getElementById('emailForm').addEventListener('submit', function(event) 
     if (mail === "" || name === "") {
         window.alert("Nhập đầy đủ đi nha.");
     } else {
-        fetch('https://send-mail-flax.vercel.app', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ mail, name })
-        })
-        .then(response => {
-            if (!response.ok) throw new Error('Error sending email');
-            return response.text();
-        })
-        .then(data => alert(data))
-        .catch(error => alert('Có lỗi xảy ra: ' + error.message));
+        document.getElementById('emailForm').addEventListener('submit', async (event) => {
+            event.preventDefault(); // Ngăn chặn reload trang
+    
+            const response = await fetch('/api/run-script', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            const data = await response.json();
+            alert(data.message); // Hiển thị thông báo từ server
+        });
     }
 });
