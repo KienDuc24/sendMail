@@ -48,3 +48,4 @@ async function sendMail(){
 sendMail()
 .then ((reslut) => console.log("check mail", reslut))
 .catch((error) => console.log(error.message));
+

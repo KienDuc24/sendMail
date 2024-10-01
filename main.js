@@ -16,7 +16,7 @@ document.getElementById('emailForm').addEventListener('submit', function(event) 
     if (mail === "" || name === "") {
         window.alert("Nhập đầy đủ đi nha.");
     } else {
-        fetch('/app', {
+        fetch('https://send-mail-flax.vercel.app', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
