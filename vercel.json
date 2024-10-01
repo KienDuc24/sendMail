@@ -1,7 +1,5 @@
 {
-  "functions": {
-    "api/run.js": {
-      "runtime": "nodejs18.0"
-    }
+  "engines": {
+    "node": "20.x"
   }
 }
