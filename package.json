@@ -4,7 +4,7 @@
   "main": "index.html",
     "scripts": {
       "dev": "node index.js",  
-      "start": "node index.js" 
+      "start": "node run.js" 
     }
   ,
   "dependencies": {
