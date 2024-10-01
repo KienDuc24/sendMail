@@ -19,7 +19,7 @@ document.getElementById('emailForm').addEventListener('submit', function(event) 
         document.getElementById('emailForm').addEventListener('submit', async (event) => {
             event.preventDefault(); // Ngăn chặn reload trang
     
-            const response = await fetch('/api/run.js', {
+            const response = await fetch('/api/run', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
