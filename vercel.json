@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/run.js": {
+      "runtime": "nodejs14.x"
+    }
+  }
+}
