@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "api/run.js": {
-      "runtime": "node.js18.x"
-    }
-  }
-}
