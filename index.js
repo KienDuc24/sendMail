@@ -35,7 +35,7 @@ async function sendMail() {
 
         const mailOptions = {
             from: 'Bùi Đức Kiên <kienducbui24@gmail.com>',
-            to: 'buiduckien24@gmail.com',
+            to: 'baonam090911@gmail.com',
             subject: "Test",
             text: "cl",
             html: '',
