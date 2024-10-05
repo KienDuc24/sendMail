@@ -1,23 +1,24 @@
 const nodemailer = require('nodemailer');
 const { google } = require('googleapis');
+const axios = require('axios');
 require('dotenv').config();
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
 const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
+const API_KEY = 'AIzaSyBd60-OctHoc172QP1LGU4wShT30Bjm8k4';
+const SCRIPT_ID = 'https://script.google.com/macros/s/AKfycbwGtiVpeQLmm53FmRgjnUk6jV0xRxTQZz3clfJu7Hd2Ncb5ltS39QgYJ0vOT4MbSma3/exec';
 
 const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
-let isMailSent = false; // Cờ để kiểm tra trạng thái
+async function fetchData() {
+    const response = await axios.get(`${SCRIPT_ID}?key=${API_KEY}`);
+    return response.data;
+}
 
-async function sendMail() {
-    if (isMailSent) {
-        console.log("Hàm sendMail đã được gọi một lần và sẽ không được gọi lại.");
-        return; // Ngừng thực hiện nếu đã gửi email
-    }
-
+async function sendMail(name, email) {
     try {
         const accessToken = await oAuth2Client.getAccessToken();
 
@@ -35,21 +36,75 @@ async function sendMail() {
 
         const mailOptions = {
             from: 'Bùi Đức Kiên <kienducbui24@gmail.com>',
-            to: 'baonam090911@gmail.com',
-            subject: "Test",
-            text: "cl",
+            to: email,
+            subject: "V",
+            text: `hello ${name}`,
             html: '',
         };
 
         const result = await transport.sendMail(mailOptions);
-        console.log("Email sent:", result);
-        isMailSent = true; // Đánh dấu rằng email đã được gửi
+        console.log("Email đã được gửi:", result);
         return result;
     } catch (error) {
-        console.error("Error sending email:", error.message);
-        throw error; // Ném lại lỗi để có thể xử lý ở nơi khác nếu cần
+        console.error("Lỗi khi gửi email:", error.message);
+        throw error;
     }
 }
 
-// Gọi hàm sendMail một lần
-sendMail().catch((error) => console.log("Error:", error.message));
+async function redeploy() {
+    const vercelToken = process.env.VERCEL_API_TOKEN;
+    const projectId = process.env.VERCEL_PROJECT_ID;
+
+    try {
+        const response = await axios.post(`https://api.vercel.com/v1/deployments`, {
+            name: 'Send Mail', // Tên dự án của bạn
+        }, {
+            headers: {
+                Authorization: `Bearer ${vercelToken}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        console.log('Đã yêu cầu tái triển khai:', response.data);
+    } catch (error) {
+        console.error('Lỗi khi tái triển khai:', error.message);
+    }
+}
+
+async function main() {
+    try {
+        const data = await fetchData(); // Lấy tất cả các hàng
+
+        if (!Array.isArray(data) || data.length === 0) {
+            console.log("Không có dữ liệu để xử lý.");
+            return;
+        }
+
+        // Gửi mail cho những người có status = 0
+        for (let i = 0; i < data.length; i++) {
+            const { name, email, stt } = data[i]; // Lấy giá trị từ mảng
+
+            if (data[i].stt === 0) {  // Kiểm tra trạng thái
+                await sendMail(name, email);  // Gửi email
+
+                // Cập nhật trạng thái
+                const updateResponse = await fetch(`https://script.google.com/macros/s/AKfycbwSZBU9PQomOMKXO5vibtIJejBjXQWfn9zR8HSywjmMlDiwJZUrLqxO2WMEMnWa-HVl/exec?rowIndex=${i + 2}`);
+                const updateData = await updateResponse.text();
+                console.log(updateData);
+            }
+        }
+
+        console.log("Gửi email và cập nhật trạng thái thành công.");
+
+    } catch (error) {
+        console.error("Lỗi:", error.message);
+    }
+}
+
+// Gọi hàm main lần đầu tiên
+main();
+
+// Khởi động lại server mỗi 5 phút
+setInterval(async () => {
+    await redeploy();
+}, 60 * 1000); // 5 phút
