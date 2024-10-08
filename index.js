@@ -37,9 +37,19 @@ async function sendMail(name, email) {
         const mailOptions = {
             from: 'Bùi Đức Kiên <kienducbui24@gmail.com>',
             to: email,
-            subject: "V",
-            text: `hello ${name}`,
-            html: '',
+            subject: "Xác nhận",
+            html: `
+    <pXin chào ${name},</p>
+    <p>Tôi đã nhận được lời xác nhận tham gia buổi đi chơi Halloween vào ngày 27/10/2024 của bạn.</p>
+    <p>Nếu có bất kì sự thay đổi hay góp ý gì, vui lòng liên hệ lại với tôi qua:</p>
+        <ul>
+            <li>Facebook: <a href="https://www.facebook.com/daylakienduc/">Kiên Đức</a></li>
+            <li>Instagram: <a href="https://www.instagram.com/its.kien/">its.kien</a></li>
+            <li>TikTok: <a href="hhttps://www.tiktok.com/@kienduk">kienduk</a> (nếu có chuỗi, hãy nhớ duy trì)</li>
+            <li>SĐT: 0989050084</li>
+            <li>Địa chỉ nhà: P1402, Chung cư HandHud, ngõ 234 Hoàng QUốc Việt, Bắc Từ Liêm, Hà Nội (yêu cầu không qua đốt)</li>
+        </ul>
+`
         };
 
         const result = await transport.sendMail(mailOptions);
